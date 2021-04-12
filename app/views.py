@@ -24,20 +24,20 @@ def upload():
 
     if request.method == 'POST' and myform.validate_on_submit():
         """ display form information """ 
-        img = myform.photo.data
-        descript = myform.description.data
-        filename = secure_filename(img.filename)
+        photo = myform.photo.data
+        description = myform.description.data
+        filename = secure_filename(photo.filename)
 
-        img.save(os.path.join(
+        photo.save(os.path.join(
             app.config['UPLOAD_FOLDER'], filename
         ))
 
-        data = [{'message':'Upload successful'}, {'filename':filename}, {'description':descript}]
+        data = [{'message':'Upload successful', 'filename':filename, 'description':description}]
 
         return jsonify(upload=data)
     else:
-        """ add error from flash view function """
-        return jsonify(error=None)
+        errors = form_errors(myform)
+        return jsonify(errors)
 
 
 # Please create all new routes and view functions above this route.
